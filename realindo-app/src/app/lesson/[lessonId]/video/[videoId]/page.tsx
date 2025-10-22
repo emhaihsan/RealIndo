@@ -94,16 +94,37 @@ export default function VideoPage({
     try {
       setIsAwarding(true);
 
-      // TODO: Call API route to award EXP (Prompt 19)
-      // For now, just show success message
-      toast.success(`🎉 +${video?.exp_reward} EXP earned!`);
-      setIsCompleted(true);
+      // Call API route to award EXP
+      const response = await fetch("/api/exp/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: address,
+          type: "video_complete",
+          sourceId: parseInt(videoId),
+        }),
+      });
 
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to award EXP");
+      }
+
+      if (data.success) {
+        toast.success(`🎉 +${video?.exp_reward} EXP earned!`);
+        setIsCompleted(true);
+      } else if (data.message === "Already earned for this source") {
+        toast.info("You've already completed this video!");
+        setIsCompleted(true);
+      } else {
+        throw new Error(data.error || "Failed to award EXP");
+      }
     } catch (error: any) {
       console.error("Error awarding EXP:", error);
-      toast.error("Failed to award EXP. Please try again.");
+      toast.error(error.message || "Failed to award EXP. Please try again.");
     } finally {
       setIsAwarding(false);
     }
@@ -149,20 +170,20 @@ export default function VideoPage({
               <Button
                 variant="ghost"
                 onClick={() => router.push("/dashboard")}
-                className="flex items-center gap-2 hover:text-purple-600"
+                className="flex items-center gap-2 hover:text-emerald-600"
               >
                 <span>←</span>
                 <span>Back to Dashboard</span>
               </Button>
               <div className="hidden md:block h-6 w-px bg-gray-300" />
-              <h1 className="text-xl font-bold text-purple-600">RealIndo</h1>
+              <h1 className="text-xl font-bold text-black-600">RINDO</h1>
             </div>
-            <div className="flex items-center gap-2 bg-purple-50 px-4 py-2 rounded-full">
+            <div className="flex items-center gap-2 bg-emerald-50 px-4 py-2 rounded-full">
               <span className="text-lg">⭐</span>
-              <span className="font-bold text-purple-700">
+              <span className="font-bold text-emerald-700">
                 +{video.exp_reward}
               </span>
-              <span className="text-sm text-purple-600">EXP</span>
+              <span className="text-sm text-emerald-600">EXP</span>
             </div>
           </div>
         </div>
@@ -171,7 +192,7 @@ export default function VideoPage({
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section - Gradient Banner */}
-        <div className="bg-linear-to-r from-purple-500 to-blue-600 rounded-2xl p-8 mb-8 text-white shadow-lg">
+        <div className="bg-linear-to-r from-emerald-500 to-teal-600 rounded-2xl p-8 mb-8 text-white shadow-lg">
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
@@ -181,7 +202,7 @@ export default function VideoPage({
                 </span>
               </div>
               <h1 className="text-3xl font-bold mb-2">{video.title}</h1>
-              <p className="text-purple-50">
+              <p className="text-black-50">
                 Complete this video to earn{" "}
                 <span className="font-bold text-yellow-300">
                   +{video.exp_reward} EXP
@@ -212,7 +233,7 @@ export default function VideoPage({
         {/* Transcript Section */}
         <div className="bg-white rounded-2xl shadow-lg p-8">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-linear-to-r from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-linear-to-r from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center">
               <span className="text-xl">📝</span>
             </div>
             <div>
@@ -246,11 +267,11 @@ export default function VideoPage({
                       <span className="text-xs font-medium text-gray-500 bg-white px-2 py-1 rounded">
                         {line.time}
                       </span>
-                      <span className="text-sm font-medium text-purple-600">
+                      <span className="text-sm font-medium text-emerald-600">
                         🗣️ Banjar
                       </span>
                     </div>
-                    <p className="text-base font-bold text-purple-700 leading-relaxed">
+                    <p className="text-base font-bold text-black-700 leading-relaxed">
                       {line.text_banjar}
                     </p>
                   </div>
