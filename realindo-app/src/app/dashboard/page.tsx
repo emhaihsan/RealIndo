@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useUserData } from "@/lib/hooks/useUserData";
 import { Button } from "@/components/ui/button";
+import { ExpDisplay } from "@/components/ExpDisplay";
 
 export default function DashboardPage() {
   const { isConnected, status } = useWeb3Auth();
@@ -156,6 +157,15 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* EXP Display */}
+        <div className="mb-8">
+          <ExpDisplay
+            currentExp={userData?.current_exp || 0}
+            totalExp={userData?.total_exp_earned || 0}
+            isLoading={loading}
+          />
         </div>
 
         {/* My Vocabulary Health */}
