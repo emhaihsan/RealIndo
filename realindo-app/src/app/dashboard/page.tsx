@@ -24,14 +24,14 @@ export default function DashboardPage() {
     if (status === "not_ready") return; // Wait for Web3Auth to initialize
 
     if (!isConnected || status !== "connected") {
-      router.push("/login");
+      router.push("/");
     }
   }, [isConnected, status, router]);
 
   const handleLogout = async () => {
     try {
       await disconnect();
-      router.push("/login");
+      router.push("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -69,8 +69,8 @@ export default function DashboardPage() {
             Error loading dashboard
           </p>
           <p className="text-sm text-gray-600 mt-2">{error.message}</p>
-          <Button onClick={() => router.push("/login")} className="mt-4">
-            Back to Login
+          <Button onClick={() => router.push("/")} className="mt-4">
+            Back to Home
           </Button>
         </div>
       </div>
@@ -257,7 +257,10 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <button className="w-full mt-6 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-lg transition-colors">
+          <button 
+            onClick={() => router.push("/lesson/1/flashcard")}
+            className="w-full mt-6 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 rounded-lg transition-colors"
+          >
             Start vocabulary review
           </button>
         </div>
@@ -312,7 +315,10 @@ export default function DashboardPage() {
           </h3>
 
           <div className="space-y-4">
-            <div className="border border-gray-200 rounded-lg p-4 hover:border-purple-300 transition-colors cursor-pointer">
+            <button
+              onClick={() => router.push("/lesson/1/video/1")}
+              className="w-full border border-gray-200 rounded-lg p-4 hover:border-purple-300 hover:bg-purple-50 transition-all cursor-pointer text-left"
+            >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 bg-linear-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center text-white text-2xl font-bold">
@@ -344,9 +350,12 @@ export default function DashboardPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </button>
 
-            <div className="border border-gray-200 rounded-lg p-4 hover:border-orange-300 transition-colors cursor-pointer">
+            <button
+              onClick={() => router.push("/lesson/1/flashcard")}
+              className="w-full border border-gray-200 rounded-lg p-4 hover:border-orange-300 hover:bg-orange-50 transition-all cursor-pointer text-left"
+            >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 bg-linear-to-br from-orange-400 to-orange-600 rounded-lg flex items-center justify-center text-white text-2xl">
@@ -376,7 +385,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </button>
           </div>
         </div>
       </main>

@@ -23,7 +23,7 @@ export default function MyNFTsPage() {
     if (status === "not_ready") return;
 
     if (!isConnected || status !== "connected") {
-      router.push("/login");
+      router.push("/");
     }
   }, [isConnected, status, router]);
 

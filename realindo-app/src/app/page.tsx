@@ -1,9 +1,83 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useWeb3Auth, useWeb3AuthConnect, useWeb3AuthUser } from "@web3auth/modal/react";
+import { useAccount } from "wagmi";
+import { syncUserToDatabase } from "@/lib/auth-helpers";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const router = useRouter();
+  const { isConnected, status } = useWeb3Auth();
+  const { connect } = useWeb3AuthConnect();
+  const { userInfo } = useWeb3AuthUser();
+  const { address } = useAccount();
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  // Redirect if already connected
+  useEffect(() => {
+    if (isConnected && status === "connected") {
+      router.push("/dashboard");
+    }
+  }, [isConnected, status, router]);
+
+  // Handle login
+  const handleLogin = async () => {
+    try {
+      setIsLoggingIn(true);
+      await connect();
+    } catch (error) {
+      console.error("Login failed:", error);
+      alert("Login failed. Please try again.");
+      setIsLoggingIn(false);
+    }
+  };
+
+  // Sync user to database after login
+  useEffect(() => {
+    async function syncUser() {
+      if (isConnected && address && isLoggingIn) {
+        try {
+          console.log("🔄 Syncing user to database...");
+          const user = await syncUserToDatabase(address, userInfo || {});
+          console.log("✅ User synced:", user);
+          
+          router.push("/dashboard");
+        } catch (error: any) {
+          console.error("❌ Failed to sync user:", error);
+          
+          const isHotReloadError = error?.message?.includes("Failed to fetch");
+          const isPopupClosedError = error?.message?.includes("popup has been closed");
+          
+          if (!isHotReloadError && !isPopupClosedError) {
+            alert(`Login successful but failed to sync user data.\n\nError: ${error?.message || "Unknown error"}`);
+          }
+        } finally {
+          setIsLoggingIn(false);
+        }
+      }
+    }
+    syncUser();
+  }, [isConnected, address, userInfo, isLoggingIn, router]);
+
+  // Show loading state during login
+  if (status === "connecting" || status === "not_ready" || isLoggingIn) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-white">
+        <div className="text-center">
+          <div className="text-6xl mb-4">🎓</div>
+          <p className="text-lg font-semibold text-gray-900">
+            {isLoggingIn ? "Setting up your account..." : "Loading..."}
+          </p>
+          {isLoggingIn && (
+            <p className="text-sm text-gray-500 mt-2">
+              Creating wallet and syncing data
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -41,10 +115,11 @@ export default function Home() {
               </a>
             </div>
             <Button
-              onClick={() => router.push("/login")}
-              className="bg-black hover:bg-gray-900 text-white px-6 py-2 text-sm"
+              onClick={handleLogin}
+              disabled={isLoggingIn}
+              className="bg-black hover:bg-gray-900 text-white px-6 py-2 text-sm disabled:bg-gray-400"
             >
-              Get Started
+              {isLoggingIn ? "Connecting..." : "Get Started"}
             </Button>
           </div>
         </div>
@@ -68,10 +143,11 @@ export default function Home() {
               languages with interactive videos, flashcards, and real rewards.
             </p>
             <Button
-              onClick={() => router.push("/login")}
-              className="bg-black hover:bg-gray-900 text-white px-8 py-3 text-base"
+              onClick={handleLogin}
+              disabled={isLoggingIn}
+              className="bg-black hover:bg-gray-900 text-white px-8 py-3 text-base disabled:bg-gray-400"
             >
-              Start Learning →
+              {isLoggingIn ? "Connecting..." : "Start Learning →"}
             </Button>
           </div>
           <div className="relative h-96 flex items-center justify-center">

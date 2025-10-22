@@ -48,7 +48,7 @@ export default function MarketplacePage() {
     if (status === "not_ready") return;
 
     if (!isConnected || status !== "connected") {
-      router.push("/login");
+      router.push("/");
     }
   }, [isConnected, status, router]);
 

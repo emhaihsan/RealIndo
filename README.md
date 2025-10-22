@@ -9,6 +9,7 @@ A blockchain-powered language learning platform that gamifies education and rewa
 ## 🎯 Overview
 
 RealIndo combines:
+
 - 📚 **Interactive Learning**: Video lessons + flashcard vocabulary practice
 - ⭐ **Gamification**: Earn EXP (experience points) for completing lessons
 - 💰 **Token Economy**: Convert EXP → RINDO tokens (1:1 ratio)
@@ -24,6 +25,7 @@ RealIndo combines:
 **Frontend**: https://rindo.netlify.app
 
 **Smart Contracts** (Base Sepolia):
+
 - RINDOToken: `0x26bBaE72dab5EEa1f5d5178CF2d3d5E6Cf55D1e0`
 - VoucherNFT: `0x5e004185A592832B3FD3cdce364dA3bdf2B08A3d`
 
@@ -32,6 +34,7 @@ RealIndo combines:
 ## 📋 Features
 
 ### For Users
+
 - ✅ Web3Auth login (Google, social)
 - ✅ Watch video lessons → earn EXP
 - ✅ Practice flashcards → earn EXP
@@ -41,6 +44,7 @@ RealIndo combines:
 - ✅ Responsive UI (mobile/tablet/desktop)
 
 ### For Merchants
+
 - ✅ Create vouchers with discount details
 - ✅ Set RINDO token cost
 - ✅ Track redemptions on-chain
@@ -51,17 +55,20 @@ RealIndo combines:
 ## 🏗️ Architecture
 
 ### Frontend
+
 - **Framework**: Next.js 15 (React)
 - **Styling**: TailwindCSS + shadcn/ui
 - **Web3**: Web3Auth + Wagmi + ethers.js
 - **Database**: Supabase (PostgreSQL)
 
 ### Backend
+
 - **API Routes**: Next.js API routes
 - **Database**: Supabase with RLS policies
 - **Authentication**: Web3Auth + wallet-based
 
 ### Blockchain
+
 - **Network**: Base Sepolia (Ethereum L2)
 - **RINDOToken**: ERC20 token for rewards
 - **VoucherNFT**: ERC1155 NFT for vouchers
@@ -107,22 +114,23 @@ realindo/
 
 ## 🔧 Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| **Frontend** | Next.js 15, React 19, TypeScript |
-| **Styling** | TailwindCSS, shadcn/ui |
-| **Web3** | Web3Auth, Wagmi, ethers.js |
-| **Database** | Supabase (PostgreSQL) |
-| **Backend** | Next.js API Routes |
-| **Blockchain** | Base Sepolia, Solidity |
-| **Smart Contracts** | Foundry, OpenZeppelin |
-| **Deployment** | Netlify (frontend), Foundry (contracts) |
+| Layer               | Technology                              |
+| ------------------- | --------------------------------------- |
+| **Frontend**        | Next.js 15, React 19, TypeScript        |
+| **Styling**         | TailwindCSS, shadcn/ui                  |
+| **Web3**            | Web3Auth, Wagmi, ethers.js              |
+| **Database**        | Supabase (PostgreSQL)                   |
+| **Backend**         | Next.js API Routes                      |
+| **Blockchain**      | Base Sepolia, Solidity                  |
+| **Smart Contracts** | Foundry, OpenZeppelin                   |
+| **Deployment**      | Netlify (frontend), Foundry (contracts) |
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js 18+
 - npm or yarn
 - Git
@@ -130,12 +138,14 @@ realindo/
 ### Installation
 
 1. **Clone repository**
+
 ```bash
 git clone https://github.com/emhaihsan/RealIndo.git
 cd RealIndo
 ```
 
 2. **Setup frontend**
+
 ```bash
 cd realindo-app
 npm install
@@ -145,6 +155,7 @@ npm run dev
 ```
 
 3. **Setup contracts** (optional)
+
 ```bash
 cd contracts
 forge install
@@ -207,6 +218,7 @@ ADMIN_WALLET_PRIVATE_KEY=your_private_key
 ## 🧪 Testing
 
 ### Frontend
+
 ```bash
 cd realindo-app
 npm run dev          # Start dev server
@@ -215,6 +227,7 @@ npm run lint         # TypeScript check
 ```
 
 ### Smart Contracts
+
 ```bash
 cd contracts
 forge test                                    # Run all tests
@@ -227,11 +240,13 @@ forge coverage                                # Code coverage
 ## 📊 Smart Contracts
 
 ### RINDOToken (ERC20)
+
 - **Function**: `mintFromEXP(address to, uint256 amount)`
 - **Owner**: Admin wallet (backend)
 - **Supply**: Minted on-demand (no cap)
 
 ### VoucherNFT (ERC1155)
+
 - **Function**: `redeemVoucher(uint256 tokenId, uint256 amount)`
 - **Mechanism**: User approves RINDO → contract burns RINDO → mints NFT
 - **Metadata**: IPFS URIs for voucher details
@@ -260,17 +275,6 @@ forge coverage                                # Code coverage
 
 ---
 
-## 🤝 Contributing
-
-Contributions welcome! Please:
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
-
----
-
 ## 📄 License
 
 MIT License - see LICENSE file for details
@@ -280,6 +284,7 @@ MIT License - see LICENSE file for details
 ## 👥 Team
 
 **Muhammad Ihsan** - Full Stack Developer
+
 - GitHub: [@emhaihsan](https://github.com/emhaihsan)
 - Email: emhaihsan@gmail.com
 
@@ -292,15 +297,6 @@ MIT License - see LICENSE file for details
 - Supabase for backend infrastructure
 - Netlify for deployment
 - Base for Ethereum L2 network
-
----
-
-## 📞 Support
-
-For questions or issues:
-1. Check [GitHub Issues](https://github.com/emhaihsan/RealIndo/issues)
-2. Create new issue with details
-3. Email: emhaihsan@gmail.com
 
 ---
 
