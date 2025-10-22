@@ -21,38 +21,38 @@ export function useUserData(walletAddress: string | undefined) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    async function fetchUserData() {
-      if (!walletAddress) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        setLoading(true);
-        setError(null);
-
-        const { data, error: fetchError } = await supabase
-          .from("users")
-          .select("*")
-          .eq("wallet_address", walletAddress.toLowerCase())
-          .single();
-
-        if (fetchError) {
-          throw fetchError;
-        }
-
-        setUserData(data);
-      } catch (err) {
-        console.error("Error fetching user data:", err);
-        setError(err as Error);
-      } finally {
-        setLoading(false);
-      }
+  const fetchUserData = async () => {
+    if (!walletAddress) {
+      setLoading(false);
+      return;
     }
 
+    try {
+      setLoading(true);
+      setError(null);
+
+      const { data, error: fetchError } = await supabase
+        .from("users")
+        .select("*")
+        .eq("wallet_address", walletAddress.toLowerCase())
+        .single();
+
+      if (fetchError) {
+        throw fetchError;
+      }
+
+      setUserData(data);
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+      setError(err as Error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchUserData();
   }, [walletAddress]);
 
-  return { userData, loading, error, refetch: () => {} };
+  return { userData, loading, error, refetch: fetchUserData };
 }

@@ -5,15 +5,18 @@ import { useAccount } from "wagmi";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useUserData } from "@/lib/hooks/useUserData";
+import { useRindoBalance } from "@/lib/hooks/useRindoBalance";
 import { Button } from "@/components/ui/button";
 import { ExpDisplay } from "@/components/ExpDisplay";
+import { RindoBalanceDisplay } from "@/components/RindoBalanceDisplay";
 
 export default function DashboardPage() {
   const { isConnected, status } = useWeb3Auth();
   const { disconnect } = useWeb3AuthDisconnect();
   const { address } = useAccount();
   const router = useRouter();
-  const { userData, loading, error } = useUserData(address);
+  const { userData, loading, error, refetch } = useUserData(address);
+  const { balance, loading: balanceLoading, refetch: refetchBalance } = useRindoBalance(address);
   const [copied, setCopied] = useState(false);
 
   // Protected route: redirect to login if not authenticated
@@ -161,11 +164,22 @@ export default function DashboardPage() {
 
         {/* EXP Display */}
         <div className="mb-8">
-          <ExpDisplay
-            currentExp={userData?.current_exp || 0}
-            totalExp={userData?.total_exp_earned || 0}
-            isLoading={loading}
-          />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="md:col-span-2">
+              <ExpDisplay
+                currentExp={userData?.current_exp || 0}
+                totalExp={userData?.total_exp_earned || 0}
+                isLoading={loading}
+              />
+            </div>
+            <div>
+              <RindoBalanceDisplay
+                balance={balance}
+                isLoading={balanceLoading}
+                onRefresh={refetchBalance}
+              />
+            </div>
+          </div>
         </div>
 
         {/* My Vocabulary Health */}
@@ -250,7 +264,10 @@ export default function DashboardPage() {
 
         {/* Quick Actions Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <button className="bg-linear-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl p-6 text-left shadow-lg transition-all hover:scale-105">
+          <button 
+            onClick={() => router.push("/lesson/1/video/1")}
+            className="bg-linear-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl p-6 text-left shadow-lg transition-all hover:scale-105"
+          >
             <div className="text-4xl mb-3">📚</div>
             <h3 className="text-xl font-bold mb-2">Continue Learning</h3>
             <p className="text-purple-100 text-sm">
@@ -258,7 +275,10 @@ export default function DashboardPage() {
             </p>
           </button>
 
-          <button className="bg-linear-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-xl p-6 text-left shadow-lg transition-all hover:scale-105">
+          <button 
+            onClick={() => router.push("/convert")}
+            className="bg-linear-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-xl p-6 text-left shadow-lg transition-all hover:scale-105"
+          >
             <div className="text-4xl mb-3">💰</div>
             <h3 className="text-xl font-bold mb-2">Convert to RINDO</h3>
             <p className="text-orange-100 text-sm">
@@ -266,7 +286,10 @@ export default function DashboardPage() {
             </p>
           </button>
 
-          <button className="bg-linear-to-br from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-xl p-6 text-left shadow-lg transition-all hover:scale-105">
+          <button 
+            onClick={() => router.push("/marketplace")}
+            className="bg-linear-to-br from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-xl p-6 text-left shadow-lg transition-all hover:scale-105"
+          >
             <div className="text-4xl mb-3">🛒</div>
             <h3 className="text-xl font-bold mb-2">Marketplace</h3>
             <p className="text-teal-100 text-sm">Redeem NFT vouchers</p>
