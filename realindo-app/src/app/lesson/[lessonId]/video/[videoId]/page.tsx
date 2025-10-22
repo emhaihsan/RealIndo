@@ -171,7 +171,7 @@ export default function VideoPage({
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section - Gradient Banner */}
-        <div className="bg-gradient-to-r from-purple-500 to-blue-600 rounded-2xl p-8 mb-8 text-white shadow-lg">
+        <div className="bg-linear-to-r from-purple-500 to-blue-600 rounded-2xl p-8 mb-8 text-white shadow-lg">
           <div className="flex items-center justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
@@ -212,7 +212,7 @@ export default function VideoPage({
         {/* Transcript Section */}
         <div className="bg-white rounded-2xl shadow-lg p-8">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-linear-to-r from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
               <span className="text-xl">📝</span>
             </div>
             <div>
@@ -226,7 +226,7 @@ export default function VideoPage({
               {video.transcript.map((line, index) => (
                 <div
                   key={index}
-                  className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-gradient-to-r from-gray-50 to-purple-50 rounded-xl border border-gray-100 hover:shadow-md transition-shadow"
+                  className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-linear-to-r from-gray-50 to-purple-50 rounded-xl border border-gray-100 hover:shadow-md transition-shadow"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">

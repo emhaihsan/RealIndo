@@ -53,17 +53,17 @@ export default function LoginPage() {
             userInfo,
             isLoggingIn,
           });
-          
+
           // Pass userInfo even if undefined - auth-helpers will handle it
           const user = await syncUserToDatabase(address, userInfo || {});
           console.log("✅ User synced:", user);
 
           // Show success message - adapt based on login type
           const loginType = userInfo?.email ? "Social" : "Wallet";
-          const message = userInfo?.email 
+          const message = userInfo?.email
             ? `✅ Login successful!\n\nWallet: ${address}\nEmail: ${userInfo.email}`
             : `✅ Login successful!\n\nWallet: ${address}\nLogin type: Wallet-only`;
-          
+
           alert(message);
           router.push("/dashboard");
         } catch (error: any) {
@@ -73,17 +73,24 @@ export default function LoginPage() {
             stack: error?.stack,
             fullError: error,
           });
-          
+
           // Suppress error alert for hot reload/network issues
           const isHotReloadError = error?.message?.includes("Failed to fetch");
-          const isPopupClosedError = error?.message?.includes("popup has been closed");
-          
+          const isPopupClosedError = error?.message?.includes(
+            "popup has been closed"
+          );
+
           if (!isHotReloadError && !isPopupClosedError) {
             alert(
-              `Login successful but failed to sync user data.\n\nError: ${error?.message || "Unknown error"}\n\nCheck console for details.`
+              `Login successful but failed to sync user data.\n\nError: ${
+                error?.message || "Unknown error"
+              }\n\nCheck console for details.`
             );
           } else {
-            console.log("⚠️ Suppressed error (likely hot reload or cancelled popup):", error?.message);
+            console.log(
+              "⚠️ Suppressed error (likely hot reload or cancelled popup):",
+              error?.message
+            );
           }
         } finally {
           setIsLoggingIn(false);
@@ -112,7 +119,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-purple-50 to-blue-50 p-4">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-linear-to-br from-purple-50 to-blue-50 p-4">
       <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-lg">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900">
