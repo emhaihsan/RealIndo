@@ -25,23 +25,19 @@ export function Flashcard({ front, back, onFlip }: FlashcardProps) {
         perspective: "1000px",
       }}
     >
-      <div
-        className="relative w-full h-full transition-transform duration-600"
-        style={{
-          transformStyle: "preserve-3d",
-          transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
-        }}
-      >
+      <div className="relative w-full h-full" style={{ transformStyle: "preserve-3d" }}>
         {/* Front Side (Banjar) */}
         <div
           className="absolute w-full h-full"
           style={{
             backfaceVisibility: "hidden",
+            transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
+            transition: "transform 0.6s ease-in-out",
           }}
         >
-          <Card className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-orange-50 to-orange-100 border-2 border-orange-200 shadow-lg hover:shadow-xl transition-shadow">
+          <Card className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 shadow-lg hover:shadow-xl transition-shadow">
             <div className="text-center space-y-4">
-              <p className="text-sm font-medium text-orange-600">Banjar</p>
+              <p className="text-sm font-medium text-green-600">Indonesia</p>
               <p className="text-4xl font-bold text-gray-900 wrap-break-word">
                 {front}
               </p>
@@ -50,17 +46,18 @@ export function Flashcard({ front, back, onFlip }: FlashcardProps) {
           </Card>
         </div>
 
-        {/* Back Side (Indonesia) */}
+        {/* Back Side (Banjar) */}
         <div
           className="absolute w-full h-full"
           style={{
             backfaceVisibility: "hidden",
-            transform: "rotateY(180deg)",
+            transform: isFlipped ? "rotateY(0deg)" : "rotateY(-180deg)",
+            transition: "transform 0.6s ease-in-out",
           }}
         >
-          <Card className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 shadow-lg hover:shadow-xl transition-shadow">
+          <Card className="w-full h-full flex flex-col items-center justify-center p-8 bg-gradient-to-br from-orange-50 to-orange-100 border-2 border-orange-200 shadow-lg hover:shadow-xl transition-shadow">
             <div className="text-center space-y-4">
-              <p className="text-sm font-medium text-green-600">Indonesia</p>
+              <p className="text-sm font-medium text-orange-600">Banjar</p>
               <p className="text-4xl font-bold text-gray-900 wrap-break-word">
                 {back}
               </p>
