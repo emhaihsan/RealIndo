@@ -263,7 +263,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Quick Actions Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <button 
             onClick={() => router.push("/lesson/1/video/1")}
             className="bg-linear-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-xl p-6 text-left shadow-lg transition-all hover:scale-105"
@@ -293,6 +293,15 @@ export default function DashboardPage() {
             <div className="text-4xl mb-3">🛒</div>
             <h3 className="text-xl font-bold mb-2">Marketplace</h3>
             <p className="text-teal-100 text-sm">Redeem NFT vouchers</p>
+          </button>
+
+          <button 
+            onClick={() => router.push("/my-nfts")}
+            className="bg-linear-to-br from-pink-500 to-rose-600 hover:from-pink-600 hover:to-rose-700 text-white rounded-xl p-6 text-left shadow-lg transition-all hover:scale-105"
+          >
+            <div className="text-4xl mb-3">🎁</div>
+            <h3 className="text-xl font-bold mb-2">My NFTs</h3>
+            <p className="text-pink-100 text-sm">View your voucher collection</p>
           </button>
         </div>
 
