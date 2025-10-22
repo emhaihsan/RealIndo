@@ -21,45 +21,72 @@ export async function createOrUpdateUser(
   name?: string
 ) {
   try {
-    console.log("💾 Attempting to upsert user to database...");
+    console.log("💾 Attempting to create/update user in database...");
     console.log("📝 Data:", {
       wallet_address: walletAddress.toLowerCase(),
       email: email || null,
       name: name || null,
     });
 
-    const { data: user, error } = await supabase
+    const normalizedAddress = walletAddress.toLowerCase();
+
+    // Step 1: Check if user exists
+    const { data: existingUser, error: checkError } = await supabase
       .from("users")
-      .upsert(
-        {
-          wallet_address: walletAddress.toLowerCase(), // Normalize to lowercase
-          email: email || null,
-          name: name || null, // Now column exists in DB
-          current_exp: 0, // Default for new users
-          total_exp_earned: 0, // Default for new users
-          updated_at: new Date().toISOString(),
-        },
-        {
-          onConflict: "wallet_address", // Update if wallet_address exists
-          ignoreDuplicates: false, // Always update
-        }
-      )
-      .select()
+      .select("*")
+      .eq("wallet_address", normalizedAddress)
       .single();
 
-    if (error) {
-      console.error("❌ Supabase error details:", {
-        message: error.message,
-        code: error.code,
-        details: error.details,
-        hint: error.hint,
-        fullError: error,
-      });
-      throw error;
+    if (checkError && checkError.code !== "PGRST116") {
+      // PGRST116 = not found (expected for new users)
+      console.error("❌ Error checking user:", checkError);
+      throw checkError;
     }
 
-    console.log("✅ User synced to database:", user);
-    return user;
+    if (existingUser) {
+      // User exists - only update email/name, PRESERVE EXP
+      console.log("✅ User exists, updating profile only (preserving EXP)");
+      const { data: updatedUser, error: updateError } = await supabase
+        .from("users")
+        .update({
+          email: email || existingUser.email,
+          name: name || existingUser.name,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("wallet_address", normalizedAddress)
+        .select()
+        .single();
+
+      if (updateError) {
+        console.error("❌ Error updating user:", updateError);
+        throw updateError;
+      }
+
+      console.log("✅ User profile updated:", updatedUser);
+      return updatedUser;
+    } else {
+      // New user - create with EXP = 0
+      console.log("🆕 New user, creating with EXP = 0");
+      const { data: newUser, error: insertError } = await supabase
+        .from("users")
+        .insert({
+          wallet_address: normalizedAddress,
+          email: email || null,
+          name: name || null,
+          current_exp: 0,
+          total_exp_earned: 0,
+        })
+        .select()
+        .single();
+
+      if (insertError) {
+        console.error("❌ Error creating user:", insertError);
+        throw insertError;
+      }
+
+      console.log("✅ New user created:", newUser);
+      return newUser;
+    }
   } catch (error: any) {
     console.error("❌ Error creating/updating user:", {
       message: error?.message,
