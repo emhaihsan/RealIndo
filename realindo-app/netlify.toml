@@ -1,15 +1,8 @@
 [build]
   command = "npm run build"
-  publish = ".next/standalone"
-  functions = ".next/server"
+  publish = ".next"
 
 # Secrets scanning configuration
 # Omit NEXT_PUBLIC_* vars since they're meant to be public
 [build.environment]
   SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_RINDO_TOKEN_ADDRESS,NEXT_PUBLIC_VOUCHER_NFT_ADDRESS,NEXT_PUBLIC_WEB3AUTH_CLIENT_ID,NEXT_PUBLIC_BASE_SEPOLIA_RPC_URL,NEXT_PUBLIC_CHAIN_ID"
-
-# Rewrite all routes to Next.js for client-side routing
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
